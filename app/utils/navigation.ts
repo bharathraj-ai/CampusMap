@@ -289,4 +289,4 @@ export function getNavigationSteps(
 
     steps.push(`📍 Head to ${dest.label}.`);
     return steps;
-}
+}       
