@@ -1,5 +1,5 @@
 /**
- * Navigation logic for Smart Campus Navigator
+ * Navigation logic for Campus Navigator
  * Handles parsing QR locations, venue codes, and generating step-by-step directions.
  */
 
@@ -141,95 +141,89 @@ export function getNavigationSteps(
     const dest = parseVenueCode(destinationVenue);
     const steps: string[] = [];
 
-    // Check if destination is the Auditorium or Canteen (route via Center Block)
     const isAuditorium = dest.label.toLowerCase().includes("auditorium");
     const isCanteen = dest.label.toLowerCase().includes("canteen");
 
-    // ── SPECIAL: Auditorium via Center Block ──
+    // ── SPECIAL: Auditorium via West Block ──
     if (isAuditorium) {
         if (source.type === "gate") {
-            steps.push("🚶 Enter the main building from the Main Gate.");
-            steps.push("➡️ Head straight to the Center Block.");
-            steps.push("⬇️ Go to the Ground Floor of Center Block.");
-            steps.push("🚪 Exit through the Center Block rear/side exit.");
-            steps.push("🚶 Walk towards the Auditorium from Center Block.");
-            steps.push("📍 You have reached the Auditorium.");
+            steps.push("Enter the main building from the Main Gate.");
+            steps.push("Head to the West Block.");
+            steps.push("Go to the Ground Floor of West Block.");
+            steps.push("Exit through the West Block rear/side exit.");
+            steps.push("Walk towards the Auditorium from West Block.");
+            steps.push("You have reached the Auditorium.");
         } else if (source.type === "indoor") {
-            if (source.block === "C") {
-                // Already in Center Block
+            if (source.block === "W") {
                 if (source.floor !== undefined && source.floor > 0) {
-                    steps.push("⬇️ Go down to the Ground Floor using stairs or lift.");
+                    steps.push("Go down to the Ground Floor using stairs or lift.");
                 }
-                steps.push("🚪 Exit through the Center Block rear/side exit.");
+                steps.push("Exit through the West Block rear/side exit.");
             } else {
-                // In West or East Block → move to Center Block first
                 if (source.floor !== undefined && source.floor > 0) {
-                    steps.push("⬇️ Go down to the Ground Floor using stairs or lift.");
+                    steps.push("Go down to the Ground Floor using stairs or lift.");
                 }
-                steps.push(`➡️ Move through the corridor from ${source.blockName} to Center Block.`);
-                steps.push("🚪 Exit through the Center Block rear/side exit.");
+                steps.push(`Move through the corridor from ${source.blockName} to West Block.`);
+                steps.push("Exit through the West Block rear/side exit.");
             }
-            steps.push("🚶 Walk towards the Auditorium from Center Block.");
-            steps.push("📍 You have reached the Auditorium.");
+            steps.push("Walk towards the Auditorium from West Block.");
+            steps.push("You have reached the Auditorium.");
         } else {
-            // Outdoor source
-            steps.push("🚶 Walk towards the Center Block.");
-            steps.push("🚶 Walk towards the Auditorium from Center Block.");
-            steps.push("📍 You have reached the Auditorium.");
+            steps.push("Walk towards the Auditorium from West Block.");
+            steps.push("You have reached the Auditorium.");
         }
         return steps;
     }
 
-    // ── SPECIAL: Canteen via Center Block ──
+    // ── SPECIAL: Canteen via West Block ──
     if (isCanteen) {
         if (source.type === "gate") {
-            steps.push("🚶 Enter the main building from the Main Gate.");
-            steps.push("➡️ Head straight to the Center Block.");
-            steps.push("⬇️ Go to the Ground Floor of Center Block.");
-            steps.push("🚪 Exit through the Center Block rear/side exit.");
-            steps.push("🚶 Walk towards the Canteen from Center Block.");
-            steps.push("📍 You have reached the Canteen.");
+            steps.push("Enter the main building from the Main Gate.");
+            steps.push("Head to the West Block.");
+            steps.push("Go to the Ground Floor of West Block.");
+            steps.push("Exit through the West Block rear/side exit.");
+            steps.push("Walk towards the Canteen from West Block.");
+            steps.push("You have reached the Canteen.");
         } else if (source.type === "indoor") {
-            if (source.block === "C") {
-                // Already in Center Block
+            if (source.block === "W") {
                 if (source.floor !== undefined && source.floor > 0) {
-                    steps.push("⬇️ Go down to the Ground Floor using stairs or lift.");
+                    steps.push("Go down to the Ground Floor using stairs or lift.");
                 }
-                steps.push("🚪 Exit through the Center Block rear/side exit.");
+                steps.push("Exit through the West Block rear/side exit.");
             } else {
-                // In West or East Block → move to Center Block first
                 if (source.floor !== undefined && source.floor > 0) {
-                    steps.push("⬇️ Go down to the Ground Floor using stairs or lift.");
+                    steps.push("Go down to the Ground Floor using stairs or lift.");
                 }
-                steps.push(`➡️ Move through the corridor from ${source.blockName} to Center Block.`);
-                steps.push("🚪 Exit through the Center Block rear/side exit.");
+                steps.push(`Move through the corridor from ${source.blockName} to West Block.`);
+                steps.push("Exit through the West Block rear/side exit.");
             }
-            steps.push("🚶 Walk towards the Canteen from Center Block.");
-            steps.push("📍 You have reached the Canteen.");
+            steps.push("Walk towards the Canteen from West Block.");
+            steps.push("You have reached the Canteen.");
         } else {
-            // Outdoor source
-            steps.push("🚶 Walk towards the Center Block.");
-            steps.push("🚶 Walk towards the Canteen from Center Block.");
-            steps.push("📍 You have reached the Canteen.");
+            steps.push("Walk towards the Canteen from West Block.");
+            steps.push("You have reached the Canteen.");
         }
         return steps;
     }
 
     // ── CASE 1: Gate to Indoor ──
     if (source.type === "gate" && dest.type === "indoor") {
-        steps.push("🚶 Enter the main building from the Main Gate.");
-        steps.push(`➡️ Move to ${dest.blockName}.`);
+        steps.push("Enter the main building from the Main Gate.");
+        steps.push(`Walk to the ${dest.blockName}.`);
         if (dest.floor !== undefined && dest.floor > 0) {
-            steps.push(`⬆️ Go to the ${dest.floorLabel} using stairs or lift.`);
+            steps.push(`Take the stairs or lift to the ${dest.floorLabel}.`);
+        } else {
+            steps.push("Stay on the Ground Floor.");
         }
-        steps.push(`📍 Room ${destinationVenue} is on the ${dest.floorLabel}.`);
+        steps.push(`Walk along the corridor to find Room ${destinationVenue}.`);
+        steps.push(`You have reached Room ${destinationVenue} (${dest.blockName}, ${dest.floorLabel}).`);
         return steps;
     }
 
     // ── CASE 2: Gate to Outdoor ──
     if (source.type === "gate" && dest.type === "outdoor") {
-        steps.push(`🚶 From the Main Gate, walk towards the ${dest.label}.`);
-        steps.push(`📍 You will reach ${dest.label}.`);
+        steps.push(`From the Main Gate, walk towards the ${dest.label}.`);
+        steps.push(`You will reach ${dest.label}.`);
         return steps;
     }
 
@@ -239,17 +233,26 @@ export function getNavigationSteps(
         const sameFloor = source.floor === dest.floor;
 
         if (sameBlock && sameFloor) {
-            steps.push(`✅ You are already on the correct floor in ${source.blockName}.`);
-            steps.push(`🚶 Walk along the corridor to Room ${destinationVenue}.`);
+            steps.push(`You are already on the correct floor in ${source.blockName}.`);
+            steps.push(`Walk along the corridor to Room ${destinationVenue}.`);
         } else if (sameBlock && !sameFloor) {
-            steps.push(`⬆️ Go to the ${dest.floorLabel} using stairs or lift.`);
-            steps.push(`📍 Room ${destinationVenue} is on that floor.`);
-        } else {
-            steps.push(`➡️ Move through the corridor from ${source.blockName} to ${dest.blockName}.`);
-            if (source.floor !== dest.floor && dest.floor !== undefined) {
-                steps.push(`⬆️ Go to the ${dest.floorLabel} using stairs or lift.`);
+            if (dest.floor !== undefined && dest.floor > (source.floor || 0)) {
+                steps.push(`Take the stairs or lift up to the ${dest.floorLabel}.`);
+            } else {
+                steps.push(`Take the stairs or lift down to the ${dest.floorLabel}.`);
             }
-            steps.push(`📍 Room ${destinationVenue} is on the ${dest.floorLabel} of ${dest.blockName}.`);
+            steps.push(`Walk along the corridor to Room ${destinationVenue}.`);
+            steps.push(`You have reached Room ${destinationVenue} (${dest.blockName}, ${dest.floorLabel}).`);
+        } else {
+            if (source.floor !== undefined && source.floor > 0) {
+                steps.push("Go down to the Ground Floor using stairs or lift.");
+            }
+            steps.push(`Walk through the corridor from ${source.blockName} to ${dest.blockName}.`);
+            if (dest.floor !== undefined && dest.floor > 0) {
+                steps.push(`Take the stairs or lift to the ${dest.floorLabel}.`);
+            }
+            steps.push(`Walk along the corridor to Room ${destinationVenue}.`);
+            steps.push(`You have reached Room ${destinationVenue} (${dest.blockName}, ${dest.floorLabel}).`);
         }
         return steps;
     }
@@ -257,36 +260,35 @@ export function getNavigationSteps(
     // ── CASE 4: Indoor to Outdoor ──
     if (source.type === "indoor" && dest.type === "outdoor") {
         if (source.floor !== undefined && source.floor > 0) {
-            steps.push(`⬇️ Go down to the Ground Floor using stairs or lift.`);
+            steps.push("Go down to the Ground Floor using stairs or lift.");
         }
-        steps.push(`🚪 Exit the main building.`);
-        steps.push(`🚶 Walk towards ${dest.label}.`);
+        steps.push("Exit the main building.");
+        steps.push(`Walk towards ${dest.label}.`);
+        steps.push(`You have reached ${dest.label}.`);
         return steps;
     }
 
     // ── CASE 5: Outdoor to Indoor ──
     if (source.type === "outdoor" && dest.type === "indoor") {
-        steps.push(`🚶 Walk towards the Center Block.`);
-        steps.push(`🚪 Enter through Center Block.`);
-
-
-        if (dest.block !== "C") {
-            steps.push(`➡️ Move to ${dest.blockName}.`);
+        steps.push("Walk through the West Block entrance.");
+        if (dest.block !== "W") {
+            steps.push(`Walk through the corridor from West Block to ${dest.blockName}.`);
         }
         if (dest.floor !== undefined && dest.floor > 0) {
-            steps.push(`⬆️ Go to the ${dest.floorLabel} using stairs or lift.`);
+            steps.push(`Take the stairs or lift to the ${dest.floorLabel}.`);
         }
-        steps.push(`📍 Room ${destinationVenue} is on the ${dest.floorLabel}.`);
+        steps.push(`Walk along the corridor to Room ${destinationVenue}.`);
+        steps.push(`You have reached Room ${destinationVenue} (${dest.blockName}, ${dest.floorLabel}).`);
         return steps;
     }
 
     // ── CASE 6: Outdoor to Outdoor ──
     if (source.type === "outdoor" && dest.type === "outdoor") {
-        steps.push(`🚶 From ${source.label}, walk towards ${dest.label}.`);
-        steps.push(`📍 You will reach ${dest.label}.`);
+        steps.push(`From ${source.label}, walk towards ${dest.label}.`);
+        steps.push(`You will reach ${dest.label}.`);
         return steps;
     }
 
-    steps.push(`📍 Head to ${dest.label}.`);
+    steps.push(`Head to ${dest.label}.`);
     return steps;
-}       
+}

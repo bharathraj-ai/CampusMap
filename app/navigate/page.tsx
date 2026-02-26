@@ -3,6 +3,10 @@
 import { useState, useEffect, useMemo, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import {
+    MapPinIcon,
+    CompassIcon,
+} from "../components/Icons";
 import { searchEvents, events as allEvents, Event } from "../data/events";
 import {
     parseLocation,
@@ -50,31 +54,13 @@ function NavigateContent() {
 
     return (
         <main className="min-h-screen w-full overflow-x-hidden">
-            <nav className="sticky top-0 z-50 glass px-3 sm:px-6 py-3">
-                <div className="max-w-4xl mx-auto flex items-center justify-between">
-                    <Link href="/" className="flex items-center gap-2 group">
-                        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-brand-500 flex items-center justify-center text-white font-black text-base sm:text-lg shadow-lg shadow-brand-500/30 group-hover:scale-110 transition">
-                            U
-                        </div>
-                        <span className="font-extrabold text-base sm:text-lg tracking-tight">
-                            Udhayam <span className="text-brand-400">2026</span>
-                        </span>
-                    </Link>
-                    <Link
-                        href="/"
-                        className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-white/10 hover:bg-white/15 text-xs sm:text-sm font-medium transition active:scale-95"
-                    >
-                        ← Back
-                    </Link>
-                </div>
-            </nav>
 
             <div className="max-w-2xl mx-auto px-3 sm:px-4 py-5 sm:py-8">
                 {/* Current Location Card */}
                 <div className="glass rounded-2xl p-5 mb-6">
                     <div className="flex items-center gap-3 mb-1">
-                        <div className="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center text-xl">
-                            📍
+                        <div className="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center text-green-400">
+                            <MapPinIcon className="w-5 h-5" />
                         </div>
                         <div>
                             <p className="text-xs text-white/40 uppercase tracking-wider font-semibold">
@@ -85,15 +71,12 @@ function NavigateContent() {
                             </p>
                         </div>
                     </div>
-                    <p className="text-xs text-white/30 mt-2">
-                        Detected from QR code: <span className="font-mono text-brand-300">/navigate?from={from}</span>
-                    </p>
                 </div>
 
                 {/* Search Input — appears FIRST */}
                 <div className="glass rounded-2xl p-5 mb-6">
                     <label className="block text-xs font-semibold uppercase tracking-wider mb-2 text-white/50">
-                        🔍 Search Event
+                        Search Event
                     </label>
                     <input
                         type="text"
@@ -167,7 +150,7 @@ function NavigateContent() {
                 {floorEvents.length > 0 && !selectedEvent && (
                     <div className="glass rounded-2xl p-4 mb-6">
                         <p className="text-xs font-semibold uppercase tracking-wider mb-3 text-white/50">
-                            📋 Events on Your Floor
+                            Events on Your Floor
                         </p>
                         <div className="space-y-2 max-h-[350px] overflow-y-auto">
                             {floorEvents.map((event, i) => (
@@ -274,15 +257,15 @@ function NavigateContent() {
                         {/* Navigation Steps */}
                         <div className="glass rounded-2xl p-5">
                             <h3 className="text-base font-bold mb-4 flex items-center gap-2">
-                                <span className="w-8 h-8 rounded-lg bg-brand-500/20 flex items-center justify-center text-lg">
-                                    🧭
+                                <span className="w-8 h-8 rounded-lg bg-accent-gold/20 flex items-center justify-center text-accent-gold">
+                                    <CompassIcon className="w-5 h-5" />
                                 </span>
                                 Step-by-Step Directions
                             </h3>
                             <div className="space-y-3">
                                 {navSteps.map((step, i) => (
                                     <div key={i} className="flex items-start gap-3">
-                                        <div className="w-7 h-7 rounded-full bg-brand-500 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+                                        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-accent-gold to-accent-gold-light flex items-center justify-center text-xs font-bold text-black shrink-0 mt-0.5">
                                             {i + 1}
                                         </div>
                                         <p className="text-sm text-white/80 pt-1">{step}</p>
@@ -313,7 +296,7 @@ function NavigateContent() {
                 {/* Empty state */}
                 {query.trim().length >= 2 && results.length === 0 && (
                     <div className="glass rounded-2xl p-8 text-center">
-                        <div className="text-4xl mb-3">🔍</div>
+                        <div className="text-4xl mb-3 text-white/30">?</div>
                         <p className="text-white/50 text-sm">
                             No events found for &quot;{query}&quot;
                         </p>
@@ -323,10 +306,6 @@ function NavigateContent() {
                     </div>
                 )}
             </div>
-
-            <footer className="text-center text-white/30 text-xs py-6 sm:py-8 mt-4 sm:mt-8 px-4">
-                © 2026 Udhayam — Smart Campus Navigator
-            </footer>
         </main>
     );
 }
