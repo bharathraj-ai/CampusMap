@@ -141,6 +141,31 @@ export function getNavigationSteps(
     const dest = parseVenueCode(destinationVenue);
     const steps: string[] = [];
 
+    // ── ALREADY AT DESTINATION CHECK ──
+    // Outdoor → same outdoor venue (e.g. Auditorium QR → Auditorium event)
+    if (
+        source.type === "outdoor" &&
+        dest.type === "outdoor" &&
+        source.label.toLowerCase() === dest.label.toLowerCase()
+    ) {
+        steps.push(`You're already at the ${dest.label}! The event is right here.`);
+        steps.push(`Look around — you've reached your destination.`);
+        return steps;
+    }
+
+    // Indoor → same indoor block + floor
+    if (
+        source.type === "indoor" &&
+        dest.type === "indoor" &&
+        source.block === dest.block &&
+        source.floor === dest.floor
+    ) {
+        steps.push(`You are already on the correct floor in ${source.blockName}.`);
+        steps.push(`Walk along the corridor to Room ${destinationVenue}.`);
+        return steps;
+    }
+
+    // Check if destination is the Auditorium or Canteen (route via West Block)
     const isAuditorium = dest.label.toLowerCase().includes("auditorium");
     const isCanteen = dest.label.toLowerCase().includes("canteen");
 
@@ -160,6 +185,7 @@ export function getNavigationSteps(
                 }
                 steps.push("Exit through the West Block rear/side exit.");
             } else {
+                // In Center or East Block → move to West Block first
                 if (source.floor !== undefined && source.floor > 0) {
                     steps.push("Go down to the Ground Floor using stairs or lift.");
                 }
@@ -169,6 +195,8 @@ export function getNavigationSteps(
             steps.push("Walk towards the Auditorium from West Block.");
             steps.push("You have reached the Auditorium.");
         } else {
+            // Outdoor source
+            steps.push("Walk towards the West Block.");
             steps.push("Walk towards the Auditorium from West Block.");
             steps.push("You have reached the Auditorium.");
         }
@@ -191,6 +219,7 @@ export function getNavigationSteps(
                 }
                 steps.push("Exit through the West Block rear/side exit.");
             } else {
+                // In Center or East Block → move to West Block first
                 if (source.floor !== undefined && source.floor > 0) {
                     steps.push("Go down to the Ground Floor using stairs or lift.");
                 }
@@ -200,6 +229,8 @@ export function getNavigationSteps(
             steps.push("Walk towards the Canteen from West Block.");
             steps.push("You have reached the Canteen.");
         } else {
+            // Outdoor source
+            steps.push("Walk towards the West Block.");
             steps.push("Walk towards the Canteen from West Block.");
             steps.push("You have reached the Canteen.");
         }

@@ -22,17 +22,32 @@ function NavigateContent() {
     const [results, setResults] = useState<Event[]>([]);
     const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
     const [navSteps, setNavSteps] = useState<string[]>([]);
+    const [mounted, setMounted] = useState(false);
 
     const location = parseLocation(from);
 
-    // Compute events on the user's current floor (only for indoor locations)
+    // Ensure hydration completes before showing dynamic content
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    // Compute events at the user's current location (indoor floor OR outdoor venue)
     const floorEvents = useMemo(() => {
-        if (location.type !== "indoor" || location.block === undefined || location.floor === undefined) return [];
-        return allEvents.filter((e) => {
-            const v = parseVenueCode(e.venue);
-            return v.type === "indoor" && v.block === location.block && v.floor === location.floor;
-        });
-    }, [location.type, location.block, location.floor]);
+        if (!mounted) return [];
+        if (location.type === "indoor") {
+            if (location.block === undefined || location.floor === undefined) return [];
+            return allEvents.filter((e) => {
+                const v = parseVenueCode(e.venue);
+                return v.type === "indoor" && v.block === location.block && v.floor === location.floor;
+            });
+        }
+        if (location.type === "outdoor") {
+            // Match events whose venue contains the outdoor location name
+            const locLabel = location.label.toLowerCase();
+            return allEvents.filter((e) => e.venue.toLowerCase().includes(locLabel));
+        }
+        return [];
+    }, [mounted, location.type, location.block, location.floor, location.label]);
 
     useEffect(() => {
         if (query.trim().length >= 2) {
@@ -150,7 +165,7 @@ function NavigateContent() {
                 {floorEvents.length > 0 && !selectedEvent && (
                     <div className="glass rounded-2xl p-4 mb-6">
                         <p className="text-xs font-semibold uppercase tracking-wider mb-3 text-white/50">
-                            Events on Your Floor
+                            {location.type === "outdoor" ? `Events at ${location.label}` : "Events on Your Floor"}
                         </p>
                         <div className="space-y-2 max-h-[350px] overflow-y-auto">
                             {floorEvents.map((event, i) => (
