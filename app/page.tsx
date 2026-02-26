@@ -3,31 +3,30 @@ import Link from "next/link";
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen w-full overflow-x-hidden">
       {/* Navbar */}
-      <nav className="sticky top-0 z-50 glass px-4 py-3">
+      <nav className="sticky top-0 z-50 glass px-3 sm:px-6 py-3">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-9 h-9 rounded-lg bg-brand-500 flex items-center justify-center text-white font-black text-lg shadow-lg shadow-brand-500/30 group-hover:scale-110 transition">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-brand-500 flex items-center justify-center text-white font-black text-base sm:text-lg shadow-lg shadow-brand-500/30 group-hover:scale-110 transition">
               U
             </div>
-            <span className="font-extrabold text-lg tracking-tight">
+            <span className="font-extrabold text-base sm:text-lg tracking-tight">
               Udhayam <span className="text-brand-400">2026</span>
             </span>
           </Link>
-
         </div>
       </nav>
 
       {/* Hero */}
-      <section className="max-w-7xl mx-auto px-4 pt-12 pb-6 text-center">
-        <h1 className="text-4xl sm:text-5xl font-black tracking-tight mb-3">
+      <section className="max-w-7xl mx-auto px-4 pt-8 sm:pt-12 pb-4 sm:pb-6 text-center">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight mb-2 sm:mb-3">
           Udhayam <span className="text-brand-400">2026</span>
         </h1>
-        <p className="text-lg text-white/50 max-w-2xl mx-auto mb-2">
+        <p className="text-base sm:text-lg max-w-2xl mx-auto mb-2 opacity-70">
           Smart Campus Navigator
         </p>
-        <p className="text-sm text-white/40 max-w-xl mx-auto">
+        <p className="text-xs sm:text-sm max-w-xl mx-auto opacity-50 px-2">
           Scan QR codes placed across campus to get step-by-step directions to
           any event venue. Click on any area below to start navigating.
         </p>
@@ -36,9 +35,9 @@ export default function HomePage() {
 
 
       {/* Campus Info Cards */}
-      <section className="max-w-7xl mx-auto px-4 py-8">
-        <h2 className="text-2xl font-bold text-center mb-6">Campus Structure</h2>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <section className="max-w-7xl mx-auto px-3 sm:px-4 py-5 sm:py-8">
+        <h2 className="text-xl sm:text-2xl font-bold text-center mb-4 sm:mb-6">Campus Structure</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           {/* Main Building */}
           <div className="glass rounded-2xl p-5">
             <div className="text-3xl mb-2">🏢</div>
@@ -160,11 +159,11 @@ export default function HomePage() {
       </section>
 
       {/* QR Locations Quick Links */}
-      <section className="max-w-7xl mx-auto px-4 py-8">
-        <h2 className="text-2xl font-bold text-center mb-6">Quick Navigation Links</h2>
-        <div className="glass rounded-2xl p-5">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
-            <Link href="/navigate?from=gate" className="rounded-xl bg-white/5 hover:bg-white/10 px-3 py-2.5 text-center text-sm font-medium transition">
+      <section className="max-w-7xl mx-auto px-3 sm:px-4 py-5 sm:py-8">
+        <h2 className="text-xl sm:text-2xl font-bold text-center mb-4 sm:mb-6">Quick Navigation Links</h2>
+        <div className="glass rounded-2xl p-3 sm:p-5">
+          <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-1.5 sm:gap-2">
+            <Link href="/navigate?from=gate" className="rounded-xl bg-white/5 hover:bg-white/10 px-2 sm:px-3 py-2 sm:py-2.5 text-center text-xs sm:text-sm font-medium transition active:scale-95">
               🚪 Main Gate
             </Link>
             {["W", "C", "E"].map((block) =>
@@ -172,16 +171,16 @@ export default function HomePage() {
                 <Link
                   key={`${block}${floor}`}
                   href={`/navigate?from=${block.toLowerCase()}${floor}`}
-                  className="rounded-xl bg-white/5 hover:bg-white/10 px-3 py-2.5 text-center text-sm font-medium transition"
+                  className="rounded-xl bg-white/5 hover:bg-white/10 px-2 sm:px-3 py-2 sm:py-2.5 text-center text-xs sm:text-sm font-medium transition active:scale-95"
                 >
                   🏢 {block === "W" ? "West" : block === "C" ? "Center" : "East"} F{floor}
                 </Link>
               ))
             )}
-            <Link href="/navigate?from=auditorium" className="rounded-xl bg-white/5 hover:bg-white/10 px-3 py-2.5 text-center text-sm font-medium transition">
+            <Link href="/navigate?from=auditorium" className="rounded-xl bg-white/5 hover:bg-white/10 px-2 sm:px-3 py-2 sm:py-2.5 text-center text-xs sm:text-sm font-medium transition active:scale-95">
               🎭 Auditorium
             </Link>
-            <Link href="/navigate?from=canteen" className="rounded-xl bg-white/5 hover:bg-white/10 px-3 py-2.5 text-center text-sm font-medium transition">
+            <Link href="/navigate?from=canteen" className="rounded-xl bg-white/5 hover:bg-white/10 px-2 sm:px-3 py-2 sm:py-2.5 text-center text-xs sm:text-sm font-medium transition active:scale-95">
               🍽️ Canteen
             </Link>
           </div>
@@ -189,7 +188,7 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="text-center text-white/30 text-xs py-8 mt-8">
+      <footer className="text-center text-white/30 text-xs py-6 sm:py-8 mt-4 sm:mt-8 px-4">
         © 2026 Udhayam — Smart Campus Navigator
       </footer>
     </main>

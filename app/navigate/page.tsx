@@ -49,28 +49,27 @@ function NavigateContent() {
     const destParsed = selectedEvent ? parseVenueCode(selectedEvent.venue) : null;
 
     return (
-        <main className="min-h-screen">
-            {/* Navbar */}
-            <nav className="sticky top-0 z-50 glass px-4 py-3">
-                <div className="max-w-7xl mx-auto flex items-center justify-between">
+        <main className="min-h-screen w-full overflow-x-hidden">
+            <nav className="sticky top-0 z-50 glass px-3 sm:px-6 py-3">
+                <div className="max-w-4xl mx-auto flex items-center justify-between">
                     <Link href="/" className="flex items-center gap-2 group">
-                        <div className="w-9 h-9 rounded-lg bg-brand-500 flex items-center justify-center text-white font-black text-lg shadow-lg shadow-brand-500/30 group-hover:scale-110 transition">
+                        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-brand-500 flex items-center justify-center text-white font-black text-base sm:text-lg shadow-lg shadow-brand-500/30 group-hover:scale-110 transition">
                             U
                         </div>
-                        <span className="font-extrabold text-lg tracking-tight">
+                        <span className="font-extrabold text-base sm:text-lg tracking-tight">
                             Udhayam <span className="text-brand-400">2026</span>
                         </span>
                     </Link>
                     <Link
                         href="/"
-                        className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white text-sm font-medium transition"
+                        className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-white/10 hover:bg-white/15 text-xs sm:text-sm font-medium transition active:scale-95"
                     >
-                        ← Back to Map
+                        ← Back
                     </Link>
                 </div>
             </nav>
 
-            <div className="max-w-2xl mx-auto px-4 py-8">
+            <div className="max-w-2xl mx-auto px-3 sm:px-4 py-5 sm:py-8">
                 {/* Current Location Card */}
                 <div className="glass rounded-2xl p-5 mb-6">
                     <div className="flex items-center gap-3 mb-1">
@@ -98,10 +97,10 @@ function NavigateContent() {
                     </label>
                     <input
                         type="text"
-                        placeholder="Type event name, department, or venue..."
+                        placeholder="Type event name or department..."
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/10 focus:border-brand-400 focus:ring-2 focus:ring-brand-400/30 outline-none text-sm transition placeholder:text-white/30"
+                        className="w-full px-3 sm:px-4 py-3 rounded-xl bg-white/10 border border-white/10 focus:border-brand-400 focus:ring-2 focus:ring-brand-400/30 outline-none text-sm transition placeholder:text-white/30"
                         autoFocus
                     />
                     {query.trim().length >= 2 && (
@@ -216,7 +215,7 @@ function NavigateContent() {
                                     Change
                                 </button>
                             </div>
-                            <div className="grid grid-cols-2 gap-3 text-sm">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                                 <div>
                                     <p className="text-white/40 text-xs">Department</p>
                                     <p className="font-medium">{selectedEvent.dept}</p>
@@ -325,8 +324,7 @@ function NavigateContent() {
                 )}
             </div>
 
-            {/* Footer */}
-            <footer className="text-center text-white/30 text-xs py-8 mt-8">
+            <footer className="text-center text-white/30 text-xs py-6 sm:py-8 mt-4 sm:mt-8 px-4">
                 © 2026 Udhayam — Smart Campus Navigator
             </footer>
         </main>
