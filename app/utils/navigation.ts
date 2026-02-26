@@ -266,10 +266,6 @@ export function getNavigationSteps(
 
     // ── CASE 5: Outdoor to Indoor ──
     if (source.type === "outdoor" && dest.type === "indoor") {
-        const isFromAuditoriumOrCanteen =
-            source.label.toLowerCase().includes("auditorium") ||
-            source.label.toLowerCase().includes("canteen");
-
         steps.push(`🚶 Walk towards the Center Block.`);
         steps.push(`🚪 Enter through Center Block.`);
 
